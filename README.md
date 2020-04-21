@@ -1,0 +1,2 @@
+# varmeth
+Method variant decorator
