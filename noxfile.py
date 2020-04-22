@@ -1,6 +1,6 @@
 import nox
 
-nox.options.sessions = ["pre_commit", "tests"]
+nox.options.sessions = ["pre_commit", "tests", "coverage"]
 
 
 @nox.session
@@ -13,10 +13,15 @@ def pre_commit(session):
 @nox.session(python=["pypy3", "3.6", "3.7", "3.8"])
 def tests(session):
     """Run unit test over different python env with code coverage"""
-    session.install("pytest", "pytest-cov", "coverage", "-e", ".")
+    session.install("pytest", "pytest-cov", "-e", ".")
     session.run(
         "py.test", "--cov=varmeth", "--cov-report=xml", "--cov-branch", "--color=yes", "-s", "-v",
     )
+
+
+@nox.session
+def coverage(session):
+    session.install("coverage")
     session.run("coverage", "report")
 
 
