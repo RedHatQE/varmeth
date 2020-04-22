@@ -1,0 +1,102 @@
+name: Tests
+
+on: [pull_request]
+
+jobs:
+  pre-commit:
+    name: Pre-Commit Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout to master
+        uses: actions/checkout@master
+
+      - name: Setup python
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.8'
+          architecture: 'x64'
+
+      - name: Pre-Commit Checks
+        run: |
+          python -m pip install pip --upgrade
+          pip install nox
+          nox -s pre_commit
+
+      - name: Analysis (git diff)
+        if: failure()
+        run: git diff
+
+  unit-tests:
+    name: UnitTests-Python-${{ matrix.python-version }}
+    needs: [ pre-commit ]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ 'pypy3', '3.6', '3.7', '3.8' ]
+    steps:
+      - name: Checkout to master
+        uses: actions/checkout@master
+
+      - name: Setup Python-${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+
+      - name: Unit Tests
+        run: |
+          python -m pip install pip --upgrade
+          pip install nox
+          nox -s tests
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1.0.6
+        with:
+          file: .coverage
+          flags: unittests
+          name: codecov-varmeth-{{ matrix.python-version }}
+          fail_ci_if_error: true
+
+  platform:
+    name: Platform-${{ matrix.os }}
+    needs: [ unit-tests]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - name: Checkout to master
+        uses: actions/checkout@master
+
+      - name: Setup python
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.8'
+          architecture: 'x64'
+
+      - name: Development setup and smoke test on platform ${{ matrix.os }}
+        run: |
+          python -m pip install pip --upgrade
+          pip install nox
+          nox -s dev_setup
+
+  package:
+    name: Build and Verify Package
+    runs-on: ubuntu-latest
+    needs: [ unit-tests]
+    steps:
+      - name: Checkout to master
+        uses: actions/checkout@master
+
+      - name: Setup python
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.8'
+          architecture: 'x64'
+
+      - name: Twine checks
+        run: |
+          python -m pip install pip --upgrade
+          pip install nox
+          nox -s package
