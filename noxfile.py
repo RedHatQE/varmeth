@@ -13,17 +13,11 @@ def pre_commit(session):
 @nox.session(python=["pypy3", "3.6", "3.7", "3.8"])
 def tests(session):
     """Run unit test over different python env with code coverage"""
-    session.install("pytest", "pytest-cov", "-e", ".")
+    session.install("pytest", "pytest-cov", "coverage", "-e", ".")
     session.run(
-        "py.test",
-        "--cov=varmeth",
-        "--cov-report",
-        "term-missing",
-        "--cov-branch",
-        "--color=yes",
-        "-s",
-        "-v",
+        "py.test", "--cov=varmeth", "--cov-report=xml", "--cov-branch", "--color=yes", "-s", "-v",
     )
+    session.run("coverage", "report")
 
 
 @nox.session()
