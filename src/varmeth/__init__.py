@@ -83,9 +83,10 @@ class variable(object):
             try:
                 method = self._mapping[method]
             except KeyError:
+                valid_varient = [v for v in self._mapping.keys() if not callable(v)]
                 raise AttributeError(
-                    f"Method {self._name} does not have a variant for {method},"
-                    f"valid variants are {', '.join(map(str, list(self._mapping.keys())))}"
+                    f"Method '{self._name}' does not have a variant for '{method}', "
+                    f"valid variants are {', '.join(valid_varient)}."
                 )
             return method(obj, *args, **kwargs)
 

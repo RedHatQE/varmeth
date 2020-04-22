@@ -77,5 +77,17 @@ def test_variable_with_alias():
 @pytest.mark.parametrize("cls", [MultiDefaultA, MultiDefaultB])
 def test_not_allow_multi_default(cls):
     _cls = cls()
-    with pytest.raises(ValueError):
+
+    with pytest.raises(ValueError, match="You cannot set the default twice!"):
         _cls.foo()
+
+
+def test_invalid_method():
+    ak = AnimalKindom()
+    error_msg = (
+        "Method 'tiger' does not have a variant for 'python', "
+        "valid variants are siberian, indian, bengal."
+    )
+
+    with pytest.raises(AttributeError, match=error_msg):
+        ak.tiger(method="python")
