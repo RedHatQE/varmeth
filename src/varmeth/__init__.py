@@ -78,8 +78,7 @@ class variable(object):
     def __get__(self, obj, objtype):
         def caller(*args, **kwargs):
             method = kwargs.pop("method", _default)
-            if not method:
-                method = _default
+
             try:
                 method = self._mapping[method]
             except KeyError:
