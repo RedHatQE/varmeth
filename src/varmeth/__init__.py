@@ -1,10 +1,39 @@
 """ Method variant decorator. You specify the desired method variant by a kwarg.
 
-Original idea:
-    Pete Savage
+.. code-block:: python
+    from varmeth import variable
 
-Implementation:
-    Milan Falešník
+    class AnimalKingdom(object):
+        @variable
+        def tiger(self):
+            print("Default Method!")
+            print("Tiger")
+
+        @tiger.variant("siberian")
+        def siberian_tiger(self):
+            print("Siberian Tiger")
+
+        @tiger.variant("indian", "bengal")
+        def bengal_tiger(self):
+            print("Bengal Tiger")
+
+        @variable(alias="python")
+        def snake(self):
+            print("Python Snake")
+
+        @snake.variant("kobra")
+        def kobra_snake(self):
+            print("Kobra Snake")
+
+        ak = AnimalKindom()
+        ak.tiger()                      # >> Default Method!    Tiger
+        ak.tiger(method="siberian")     # >> Siberian Tiger
+        ak.tiger(method="indian")       # >> Bengal Tiger
+        ak.tiger(method="bengal")       # >> Bengal Tiger
+
+        ak.snake()                      # >> Python Snake
+        ak.snake(method="python")       # >> Python Snake
+        ak.snake(method="kobra")        # >> Kobra Snake
 """
 
 
@@ -13,7 +42,17 @@ class _default:
 
 
 class variable(object):
-    """Create a new variable method."""
+    """Create a new variable method
+
+    .. code-block:: python
+        class FooClass(object):
+            @variable
+            def foo(self):
+                pass
+            @foo.variant("bar")
+            def foo_variant(self):
+                pass
+    """
 
     def __init__(self, *args, **kwargs):
         if len(args) == 1 and callable(args[0]):
