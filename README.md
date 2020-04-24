@@ -8,13 +8,13 @@
     <a href="https://pypi.org/project/varmeth/#history">
     <img alt="PyPI version" src="https://badge.fury.io/py/varmeth.svg">
     </a>
-    <a href="https://codecov.io/gh/digitronik/varmeth">
-    <img src="https://codecov.io/gh/digitronik/varmeth/branch/master/graph/badge.svg" />
+    <a href="https://codecov.io/gh/RedHatQE/varmeth">
+      <img src="https://codecov.io/gh/RedHatQE/varmeth/branch/master/graph/badge.svg" />
     </a>
-    <a href="https://github.com/digitronik/varmeth/actions">
-    <img alt="github actions" src="https://github.com/digitronik/varmeth/workflows/Tests/badge.svg?branch=master">
+    <a href="https://github.com/RedHatQE/varmeth/actions?query=workflow%3ATests">
+    <img alt="github actions" src="https://github.com/RedHatQE/varmeth/workflows/Tests/badge.svg?branch=master">
     </a>
-    <a href="https://github.com/digitronik/varmeth/blob/master/LICENSE">
+    <a href="https://github.com/RedHatQE/varmeth/blob/master/LICENSE">
     <img alt="License: GPLv3" src="https://img.shields.io/pypi/l/varmeth.svg?version=latest">
     </a>
     <a href="https://pypi.org/project/black">
@@ -23,7 +23,7 @@
 </p>
 
 Simple library that allows a method to choose dynamically implementation at runtime depending on the
-context via decorators.
+context via _decorators_.
 
 _Varmeth_ was originally part of [ManageIQ Integration test](https://github.com/ManageIQ/integration_tests) library.
 
@@ -53,7 +53,7 @@ and need to be annotated with `@tiger.variant("variant-name")` annotations, wher
 is a string identifier that will be used at runtime to select the required `variant` implementation.
 These will be the _variants_.
 
-Note that the _variable_ method can be associated with multiple implementations or _variants_:
+Note that the _variable_ method can be associated with multiple implementations or _variants_.
 
 ```python
 from varmeth import variable
@@ -75,7 +75,7 @@ class CatFamily(object):
 <br>
 
 To choose between the different _variants_ , the `method` parameter is used to select
-the proper context, using the proper _variant-name_ as a value:
+the proper context, using the proper _variant-name_ as a value.
 
 ```shell script
 In [1]: cat = CatFamily()
@@ -96,7 +96,7 @@ Bengal Tiger
 <br>
 
 You can also add and alias name to the _default_ method using the `alias` parameter, though note
-that **only one `default` method is allowed**.
+that only one `default` method is allowed.
 
 ```python
 from varmeth import variable
@@ -131,9 +131,7 @@ The following example shows an _Entity_ class that supports the _delete_ operati
 to get the entity removed.
 
 Using vanilla Python implementation you will have to call the proper method for each context,
-_explicitly_.
-
-Instead, you can simply call the same method and provide the context, and `Varmeth` will do the
+_explicitly_. Instead, you can simply call the same method and provide the context, and `Varmeth` will do the
 rest.
 
 <table>
@@ -185,10 +183,9 @@ entity.delete(method="rest")    # >> Delete with REST!
 
 As you can see, _Varmeth_ provides a very convenient _context switcher_ interface, which some may
 find handy when implementing integration tests designed to follow test parametrization patterns,
-like [some popular test frameworks such as Pytest](http://doc.pytest.org/en/latest/example/parametrize.html#parametrizing-tests).
+like some popular test frameworks such as [Pytest](http://doc.pytest.org/en/latest/example/parametrize.html#parametrizing-tests).
 offer. The following is an example of how to do exactly that with Pytest using `Varmeth`: we can
-easily parametrize the _context under test_ using `UI` and `REST` as parameters:
-
+easily parametrize the _context under test_ using `UI` and `REST` as parameters.
 
 ```python
 import pytest
