@@ -203,8 +203,5 @@ def test_delete_entity(context):
 
 Feel free to create Issues if you find bugs, or go ahead and submit your own Pull Requests.
 
-**Please note**: When submitting new PRs:
+**Please note**: When submitting new PRs, ensure your code passes all checks.
 
-- Make sure your code passes all the pre-commit checks:
-    - Install _nox_ `pip install nox`
-    - Run _pre-commit_ and _tests_ `nox`
