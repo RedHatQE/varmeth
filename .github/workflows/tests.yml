@@ -56,7 +56,7 @@ jobs:
         with:
           file: coverage.xml
           flags: unittests
-          name: codecov-varmeth-{{ matrix.python-version }}
+          name: codecov-varmeth-${{ matrix.python-version }}
           fail_ci_if_error: true
 
   platform:
