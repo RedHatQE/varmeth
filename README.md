@@ -25,6 +25,8 @@
 Simple library that allows a method to choose dynamically implementation at runtime depending on the
 context via decorators.
 
+_Varmeth_ was originally part of [ManageIQ Integration test](https://github.com/ManageIQ/integration_tests) library.
+
 ## Installation and usage
 
 ### Installation
@@ -122,17 +124,21 @@ Kobra Snake
 ```
 <br>
 
-_Varmeth_ was originally part of [ManageIQ Integration test](https://github.com/ManageIQ/integration_tests) library, so
-you may be interested to see an example illustrating how to do solve the same problem in both libraries.
+### Using Varmeth against plain Python implementation
 
 The following example shows an _Entity_ class that supports the _delete_ operation for two different contexts, the `UI`
 (front-end) and the `REST` (back-end) contexts. As you can infer, each context requires very different implementations
 to get the entity removed.
 
+Using vanilla Python implementation you will have to call the proper method for each context,
+_explicitly_.
+
+Instead, you can simply call the same method and provide the context, and `Varmeth` will do the
+rest.
 
 <table>
 <tr>
-<th> ManageIQ </th>
+<th> Plain Python </th>
 <th> Varmeth </th>
 </tr>
 <tr>
