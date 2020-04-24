@@ -22,8 +22,10 @@
     </a>
 </p>
 
+Simple library that allows a method to choose dynamically implementation at runtime depending on the
+context via decorators.
 
-This is simple library providing decorator to invoke different variant of class methods.
+_Varmeth_ was originally part of [ManageIQ Integration test](https://github.com/ManageIQ/integration_tests) library.
 
 ## Installation and usage
 
@@ -31,12 +33,27 @@ This is simple library providing decorator to invoke different variant of class 
 
 `varmeth` can be installed by running `pip install varmeth`
 
-
 ### Usage
 
 Below example can show you how to use `varmeth`. You can see a different _method variant_.
 You’ll have to decorate _default method_ with `variable` and register it with different _method variant_.
 You can also register _variant_ with multiple names.
+
+The following code snippet shows how to use `varmeth` in a real world example:
+
+In this example, the `tiger` method will change it's implementation based on the context at
+runtime, so it must be annotated with the `@variable` annotation in order to do so. It will be
+the _variable_ method.
+
+The body of this method will be the `default` implementation - the implementation used for this
+method when no context is explicitly used.
+
+The `siberian_tiger` and `bengal_tiger` are two different implementations for the `tiger` method,
+and need to be annotated with `@tiger.variant("variant-name")` annotations, where `variant-name`
+is a string identifier that will be used at runtime to select the required `variant` implementation.
+These will be the _variants_.
+
+Note that the _variable_ method can be associated with multiple implementations or _variants_:
 
 ```python
 from varmeth import variable
@@ -55,8 +72,10 @@ class CatFamily(object):
    def bengal_tiger(self):
        print("Bengal Tiger")
 ```
+<br>
 
-To access different _method variant_; you need to pass the `method` argument as a registered _variant’s name_.
+To choose between the different _variants_ , the `method` parameter is used to select
+the proper context, using the proper _variant-name_ as a value:
 
 ```shell script
 In [1]: cat = CatFamily()
@@ -74,8 +93,10 @@ Bengal Tiger
 In [5]: cat.tiger(method="bengal")
 Bengal Tiger
 ```
+<br>
 
-You can add `alias` to the _default method_ but multiple default methods are not allowed.
+You can also add and alias name to the _default_ method using the `alias` parameter, though note
+that **only one `default` method is allowed**.
 
 ```python
 from varmeth import variable
@@ -101,13 +122,24 @@ Python Snake
 In [4]: rep.snake(method="kobra")
 Kobra Snake
 ```
-- _varmeth_ was part of [ManageIQ Integration test](https://github.com/ManageIQ/integration_tests).
-Let's take an example from it. Suppose we have _Entity_ which supports _deletion_ operation with `UI` and `REST`.
+<br>
+
+### Using Varmeth against plain Python implementation
+
+The following example shows an _Entity_ class that supports the _delete_ operation for two different contexts, the `UI`
+(front-end) and the `REST` (back-end) contexts. As you can infer, each context requires very different implementations
+to get the entity removed.
+
+Using vanilla Python implementation you will have to call the proper method for each context,
+_explicitly_.
+
+Instead, you can simply call the same method and provide the context, and `Varmeth` will do the
+rest.
 
 <table>
 <tr>
-<th> Normal Approach </th>
-<th> varmeth Approach </th>
+<th> Plain Python </th>
+<th> Varmeth </th>
 </tr>
 <tr>
 <td>
@@ -149,9 +181,14 @@ entity.delete(method="rest")    # >> Delete with REST!
 </tr>
 </table>
 
-- The _varmeth approach_ will help you in `context` switching.
-That will be helpful in test parameterization. In above example,
-We can easily parametrize tests for `UI` and `REST`.
+<br>
+
+As you can see, _Varmeth_ provides a very convenient _context switcher_ interface, which some may
+find handy when implementing integration tests designed to follow test parametrization patterns,
+like [some popular test frameworks such as Pytest](http://doc.pytest.org/en/latest/example/parametrize.html#parametrizing-tests).
+offer. The following is an example of how to do exactly that with Pytest using `Varmeth`: we can
+easily parametrize the _context under test_ using `UI` and `REST` as parameters:
+
 
 ```python
 import pytest
@@ -164,8 +201,6 @@ def test_delete_entity(context):
 
 ### Contribute
 
-- Install in the development mode `pip install -e .`
-- Test your changes
-    - Install _nox_ `pip install nox`
-    - Run _pre-commit_ and _tests_ `nox`
-- Send a pull request
+Feel free to create Issues if you find bugs, or go ahead and submit your own Pull Requests.
+
+**Please note**: When submitting new PRs, ensure your code passes all checks.
