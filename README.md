@@ -9,12 +9,12 @@
     <img alt="PyPI version" src="https://badge.fury.io/py/varmeth.svg">
     </a>
     <a href="https://codecov.io/gh/RedHatQE/varmeth">
-      <img src="https://codecov.io/gh/RedHatQE/varmeth/branch/master/graph/badge.svg" />
+      <img src="https://codecov.io/gh/RedHatQE/varmeth/branch/main/graph/badge.svg" />
     </a>
     <a href="https://github.com/RedHatQE/varmeth/actions?query=workflow%3ATests">
-    <img alt="github actions" src="https://github.com/RedHatQE/varmeth/workflows/Tests/badge.svg?branch=master">
+    <img alt="github actions" src="https://github.com/RedHatQE/varmeth/workflows/Tests/badge.svg?branch=main">
     </a>
-    <a href="https://github.com/RedHatQE/varmeth/blob/master/LICENSE">
+    <a href="https://github.com/RedHatQE/varmeth/blob/main/LICENSE">
     <img alt="License: GPLv3" src="https://img.shields.io/pypi/l/varmeth.svg?version=latest">
     </a>
     <a href="https://pypi.org/project/black">
