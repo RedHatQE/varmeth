@@ -3,7 +3,7 @@ name: Publish varmeth to PyPI
 on:
   push:
     branches:
-      - master
+      - main
     tags:
       - '*'
 
@@ -13,13 +13,13 @@ jobs:
     if: startsWith(github.event.ref, 'refs/tags')
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout to master
-        uses: actions/checkout@master
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Setup python
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
-          python-version: '3.8'
+          python-version: '3.x'
           architecture: 'x64'
 
       - name: Build Package and Check
