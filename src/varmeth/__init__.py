@@ -1,4 +1,5 @@
-""" Method variant decorator. You specify the desired method variant by a kwarg.
+""" Method variant decorator.
+You specify the desired method variant by a kwarg.
 
 .. code-block:: python
     from varmeth import variable
@@ -41,7 +42,7 @@ class _default:
     pass
 
 
-class variable(object):
+class variable:
     """Create a new variable method
 
     .. code-block:: python
@@ -62,7 +63,8 @@ class variable(object):
             self._mapping = {_default: f}
             self._alias = None
         else:
-            # Decorator with parameters, the default function comes later in __call__
+            # Decorator with parameters,
+            # the default function comes later in __call__
             self._name = None
             self._mapping = {}
             self._alias = kwargs.get("alias")
@@ -82,10 +84,13 @@ class variable(object):
             try:
                 method = self._mapping[method]
             except KeyError:
-                valid_varient = [v for v in self._mapping.keys() if not callable(v)]
+                valid_varient = [
+                    v for v in self._mapping.keys() if not callable(v)
+                ]  # noqa
                 raise AttributeError(
-                    f"Method '{self._name}' does not have a variant for '{method}', "
-                    f"valid variants are {', '.join(valid_varient)}."
+                    f"Method '{self._name}' does not have a variant for"
+                    f"{method}', valid variants are"
+                    f"{', '.join(valid_varient)}."
                 )
             return method(obj, *args, **kwargs)
 
