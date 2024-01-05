@@ -4,7 +4,7 @@ import pytest
 from varmeth import variable
 
 
-class AnimalKindom(object):
+class AnimalKindom:
     @variable
     def tiger(self):
         print("Default Method!")
