@@ -1,6 +1,14 @@
-name: Tests
+name: 🕵️ Test suite
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: ["opened", "synchronize", "reopened"]
+  schedule:
+    # Run every Friday at 23:59 UTC
+    - cron: 59 23 * * 5
 
 jobs:
   pre-commit:
@@ -9,50 +17,47 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: '3.x'
           architecture: 'x64'
 
       - name: Pre-Commit Checks
         run: |
-          python -m pip install pip --upgrade
-          pip install nox
-          nox -s pre_commit
+          python -m pip install -e .[dev]
+          pre-commit run -a
 
       - name: Analysis (git diff)
         if: failure()
         run: git diff
 
   unit-tests:
-    name: UnitTests-Python-${{ matrix.python-version }}
+    name: UnitTests-🐍-${{ matrix.python-version }}
     needs: [ pre-commit ]
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [ 'pypy3', '3.6', '3.7', '3.8' ]
+        python-version: [ '3.7', '3.8', '3.9', '3.10', '3.11', '3.12' ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup Python-${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          architecture: x64
 
       - name: Unit Tests
         run: |
           python -m pip install pip --upgrade
-          pip install nox
-          nox -s tests
-          nox -s coverage
+          python -m pip install -e .[test]
+          py.test --cov=varmeth --cov-report=xml --cov-branch --color=yes -s -v
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1.3.1
+        uses: codecov/codecov-action@v3
         with:
           file: coverage.xml
           flags: unittests
@@ -68,10 +73,10 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: '3.x'
           architecture: 'x64'
@@ -79,25 +84,26 @@ jobs:
       - name: Development setup and smoke test on platform ${{ matrix.os }}
         run: |
           python -m pip install pip --upgrade
-          pip install nox
-          nox -s dev_setup
+          python -m pip install -e .
+          python -c "from varmeth import variable"
 
   package:
-    name: Build and Verify Package
+    name: ⚙️ Build & Verify Package
     runs-on: ubuntu-latest
-    needs: [ unit-tests]
+
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Setup python
-        uses: actions/setup-python@v2
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
-          architecture: 'x64'
+          python-version: "3.x"
+          architecture: "x64"
 
-      - name: Twine checks
+      - name: Build and verify with twine
         run: |
-          python -m pip install pip --upgrade
-          pip install nox
-          nox -s package
+          pip install wheel twine
+          pip wheel --no-deps -w dist .
+          ls -l dist
+          twine check dist/*

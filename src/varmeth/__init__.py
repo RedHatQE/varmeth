@@ -88,8 +88,8 @@ class variable:
                     v for v in self._mapping.keys() if not callable(v)
                 ]  # noqa
                 raise AttributeError(
-                    f"Method '{self._name}' does not have a variant for"
-                    f"{method}', valid variants are"
+                    f"Method '{self._name}' does not have a variant for "
+                    f"'{method}', valid variants are "
                     f"{', '.join(valid_varient)}."
                 )
             return method(obj, *args, **kwargs)
