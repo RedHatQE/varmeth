@@ -12,6 +12,11 @@ jobs:
     name: Build and publish Python 🐍 distributions to PyPI
     if: startsWith(github.event.ref, 'refs/tags')
     runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/varmeth
+    permissions:
+      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -29,7 +34,4 @@ jobs:
           python -m twine check dist/*
 
       - name: Deploy to PyPi
-        uses: pypa/gh-action-pypi-publish@v1.8.11
-        with:
-          user: __token__
-          password: ${{ secrets.pypi_varmeth }}
+        uses: pypa/gh-action-pypi-publish@release/v1
