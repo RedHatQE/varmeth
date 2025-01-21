@@ -1,4 +1,4 @@
-""" Method variant decorator.
+"""Method variant decorator.
 You specify the desired method variant by a kwarg.
 
 .. code-block:: python
@@ -55,7 +55,7 @@ class variable:
                 pass
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         if len(args) == 1 and callable(args[0]):
             # Decorator without parameters
             f = args[0]
@@ -84,9 +84,7 @@ class variable:
             try:
                 method = self._mapping[method]
             except KeyError:
-                valid_varient = [
-                    v for v in self._mapping.keys() if not callable(v)
-                ]  # noqa
+                valid_varient = [v for v in self._mapping.keys() if not callable(v)]  # noqa
                 raise AttributeError(
                     f"Method '{self._name}' does not have a variant for "
                     f"'{method}', valid variants are "
@@ -99,7 +97,7 @@ class variable:
     def variant(self, *names):
         """Register a new variant of a method under a name."""
 
-        def g(f):
+        def g(f) -> None:
             for name in names:
                 self._mapping[name] = f
 

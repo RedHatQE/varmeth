@@ -40,18 +40,18 @@ class AnimalKindom:
 class MultiDefaultA:
     @variable(alias="b")
     @variable
-    def foo(self):
+    def foo(self) -> None:
         pass
 
 
 class MultiDefaultB:
     @variable(alias="a")
     @variable(alias="b")
-    def foo(self):
+    def foo(self) -> None:
         pass
 
 
-def test_variable_without_alias():
+def test_variable_without_alias() -> None:
     ak = AnimalKindom()
 
     # check default call
@@ -63,7 +63,7 @@ def test_variable_without_alias():
     assert ak.tiger(method="bengal") == "bengal_tiger"
 
 
-def test_variable_with_alias():
+def test_variable_with_alias() -> None:
     ak = AnimalKindom()
 
     # check default call
@@ -75,14 +75,14 @@ def test_variable_with_alias():
 
 
 @pytest.mark.parametrize("cls", [MultiDefaultA, MultiDefaultB])
-def test_not_allow_multi_default(cls):
+def test_not_allow_multi_default(cls) -> None:
     _cls = cls()
 
     with pytest.raises(ValueError, match="You cannot set the default twice!"):
         _cls.foo()
 
 
-def test_invalid_method():
+def test_invalid_method() -> None:
     ak = AnimalKindom()
     error_msg = (
         "Method 'tiger' does not have a variant for 'python', "
